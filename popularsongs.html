@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+        body {
+        background-image: url('background.jpg'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        position: relative;
+        overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+        background-color: #a0aec0;
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 40px 20px;
+        margin: 20px;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(264, 135, 135, 0.15);
+        position: relative;
+        z-index: 10;
+        }
+        
+       .header H1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #ffd700;
+        -webkit-text-stroke: 0.2px black;
+        text-shadow: 1px 1px 00 black;
+        }
+        .header p {
+        color: white;
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        }
+        /* Back Button */
+        .back-button {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .back-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        }
+         /* Snow */
+        .snowflake {
+        position: absolute;
+        top: -10px;
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        pointer-events: none;
+        animation-name: fall;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        }
+         @keyframes fall {
+        0% { transform: translateY(0) translateX(0); opacity: 0.8; }
+        100% { transform: translateY(100vh) translateX(30px); opacity: 0.8; }
+        } 
+        /* Songs Grid */
+.songs-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.month-card {
+    background: #999;
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.month-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 251, 0, 0.6);
+    background: rgba(196, 130, 130, 0.12);
+}
+
+.month-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.month-icon {
+    font-size: 2rem;
+    margin-right: 15px;
+}
+
+.month-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: #ffd700;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.song-list {
+    list-style: none;
+}
+
+.song-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(189, 33, 33, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.song-item:last-child {
+    border-bottom: none;
+}
+
+.song-item:hover {
+    padding-left: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0 -10px;
+    padding-right: 10px;
+    border-radius: 8px;
+}
+
+.song-rank {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background: #ffd700;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.song-title {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.song-artist {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-left: 37px;
+}
+
+.play-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.song-item:hover .play-icon {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .month-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .month-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        margin: 10px;
+        padding: 30px 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .month-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .songs-container {
+        padding: 10px;
+    }
+}
+
+/* Music animation */
+@keyframes musicPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.song-item:hover .play-icon {
+    animation: musicPulse 1s infinite;
+}
+    </style>
+</head>
+<body>
+     <header class="header">
+        <h1>Popular Songs in Every Month</h1>
+        <p>Discover the greatest hits that defined each month of the year</p>
+        <a href="newyear.html" class="back-button">← Back to Countdown</a>
+    </header>
+
+
+       
+    <div class="songs-container">
+        <div class="month-grid">
+            <!-- January -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">❄️</span>
+                    <h2 class="month-name">January</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">New Year's Day</div>
+                        <div class="song-artist">U2</div>
+                        <span class="play-icon">▶️</span>
+                </ul>
+            </div>
+
+            <!-- February -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">💝</span>
+                    <h2 class="month-name">February</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">My Funny Valentine</div>
+                        <div class="song-artist">Chet Baker</div>
+                        <span class="play-icon">▶️</span>
+
+                </ul>
+            </div>
+
+            <!-- March -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🌸</span>
+                    <h2 class="month-name">March</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">Marching On</div>
+                        <div class="song-artist">OneRepublic</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- April -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🌷</span>
+                    <h2 class="month-name">April</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">April Showers</div>
+                        <div class="song-artist">Producers</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- May -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🌺</span>
+                    <h2 class="month-name">May</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">May We All</div>
+                        <div class="song-artist">Florida Georgia Line</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- June -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">☀️</span>
+                    <h2 class="month-name">June</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">June Hymn</div>
+                        <div class="song-artist">The Decemberists</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- July -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🎆</span>
+                    <h2 class="month-name">July</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">July Morning</div>
+                        <div class="song-artist">Uriah Heep</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- August -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🌻</span>
+                    <h2 class="month-name">August</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">August</div>
+                        <div class="song-artist">Taylor Swift</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- September -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🍂</span>
+                    <h2 class="month-name">September</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">September</div>
+                        <div class="song-artist">Earth, Wind & Fire</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- October -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🎃</span>
+                    <h2 class="month-name">October</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">October</div>
+                        <div class="song-artist">U2</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- November -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🍁</span>
+                    <h2 class="month-name">November</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">November Rain</div>
+                        <div class="song-artist">Guns N' Roses</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- December -->
+            <div class="month-card">
+                <div class="month-header">
+                    <span class="month-icon">🎄</span>
+                    <h2 class="month-name">December</h2>
+                </div>
+                <ul class="song-list">
+                    <li class="song-item">
+                        <span class="song-rank">1</span>
+                        <div class="song-title">December, 1963</div>
+                        <div class="song-artist">The Four Seasons</div>
+                        <span class="play-icon">▶️</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Snow
+    const snowflakesCount = 100;
+    for (let i = 0; i < snowflakesCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+        snowflake.style.width = (1 + Math.random() * 3) + 'px';
+        snowflake.style.height = snowflake.style.width;
+        snowflake.style.animationDuration = (5 + Math.random() * 10) + 's';
+        snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+        snowflake.style.animationDelay = Math.random() * 10 + 's';
+        document.body.appendChild(snowflake);
+    }
+        // Add interactive effects to song items
+        document.addEventListener('DOMContentLoaded', () => {
+            const songItems = document.querySelectorAll('.song-item');
+            
+            songItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Simulate play action
+                    const playIcon = item.querySelector('.play-icon');
+                    playIcon.textContent = '⏸️';
+                    
+                    setTimeout(() => {
+                        playIcon.textContent = '▶️';
+                    }, 2000);
+                    
+                    // Add a subtle animation
+                    item.style.animation = 'musicPulse 0.5s ease';
+                    setTimeout(() => {
+                        item.style.animation = '';
+                    }, 500);
+                });
+            });
+            
+            // Add staggered animation to month cards
+            const monthCards = document.querySelectorAll('.month-card');
+            monthCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

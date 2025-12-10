@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YEAR IN REVIEW WEBSITE</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+    body {
+        background-image: url('background.jpg'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        position: relative;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .disc {
+        width: 350px; 
+        height: 350px;
+        background-image: url('disc.jpg'); 
+        background-size: cover;
+        background-position: center;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 0 15px rgba(255,255,255,0.6); 
+        transition: all 0.2s ease-in-out; 
+        animation: spin 4s linear infinite;
+    }
+
+    .disc:hover {
+        transform: scale(1.02); 
+        box-shadow: 0 12px 20px rgba(0,0,0,0.5);
+    }
+
+    .disc:active {
+        transform: scale(1.05);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    /* Countdown */
+    .countdown-container {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .countdown-box {
+        background: rgba(0,0,0,0.7);
+        color: #ffdd57;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        min-width: 70px;
+    }
+
+    .countdown-box .number {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .countdown-box .label {
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Snow */
+    .snowflake {
+        position: absolute;
+        top: -10px;
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        pointer-events: none;
+        animation-name: fall;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(0) translateX(0); opacity: 0.8; }
+        100% { transform: translateY(100vh) translateX(30px); opacity: 0.8; }
+    }
+
+    /* ====== MONTH TIMELINE UPDATED (BIG SQUARES) ====== */
+    #monthlyTimeline {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-width: 90%;
+        justify-content: center;
+    }
+
+    .month-box {
+        width: 90px;
+        height: 90px;
+        background-color: #a0aec0;
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+        position: relative;
+        line-height: 1.2;
+        padding: 0.35rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.25);
+    }
+
+    .month-box:hover {
+        background-color: #4299e1;
+        transform: scale(1.12);
+        box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+    }
+
+    .month-box:active {
+        transform: scale(1.0);
+        background-color: #3182ce;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+    }
+
+    .month-box.active {
+        background-color: #e53e3e;
+        box-shadow: 0 0 12px rgba(229, 62, 62, 0.8);
+    }
+
+    .tooltip {
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        white-space: nowrap;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .month-box:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+    .popularsongs-button {
+        display: inline-block;
+        padding: 12px 25px;
+        text-decoration: none;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="flex flex-col items-center justify-center p-8 bg-white bg-opacity-80 shadow-xl rounded-xl">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6">Happy New Year 2026!</h1>
+
+    <div id="countdown" class="countdown-container">
+        <div class="countdown-box"><div class="number" id="days">0</div><div class="label">Days</div></div>
+        <div class="countdown-box"><div class="number" id="hours">0</div><div class="label">Hours</div></div>
+        <div class="countdown-box"><div class="number" id="minutes">0</div><div class="label">Minutes</div></div>
+        <div class="countdown-box"><div class="number" id="seconds">0</div><div class="label">Seconds</div></div>
+    </div>
+    
+    <div id="visualDisc" class="disc"></div>
+
+    <p class="mt-4 text-sm text-gray-500">Click the disc to play music! (And watch it zoom in!)</p>
+    
+    <h2 class="text-xl font-bold text-gray-700 mt-6 mb-3">Key Events of 2025</h2>
+    
+    <div id="monthlyTimeline"></div>
+<audio id="bgMusic" src="flymetothemoon.mp3"></audio>
+
+<script>
+    const monthlyEvents = [
+        "Jan: International Tech Expo kicks off.",
+        "Feb: Major sporting event finals.",
+        "Mar: Spring Equinox and new policy enacted.",
+        "Apr: Global Earth Day clean-up campaign.",
+        "May: Annual Film Festival draws crowds.",
+        "Jun: Summer Solstice and school holidays start.",
+        "Jul: Major national independence celebration.",
+        "Aug: Scientific discovery breakthrough announced.",
+        "Sep: Back-to-school and financial quarter ends.",
+        "Oct: Fall harvest festivals begin.",
+        "Nov: Major political election held.",
+        "Dec: Holiday season begins & New Year preparations."
+    ];
+
+    const disc = document.getElementById("visualDisc");
+    const music = document.getElementById("bgMusic");
+
+    // Countdown
+    const targetDate = new Date("Jan 1, 2026 00:00:00").getTime();
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+            document.getElementById("countdown").innerHTML =
+                "<div class='countdown-box'><div class='number'>🎉</div><div class='label'>Happy New Year 2026!</div></div>";
+            clearInterval(countdownInterval);
+            disc.style.animation = 'none';
+            return;
+        }
+
+        daysEl.textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
+        hoursEl.textContent = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        minutesEl.textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        secondsEl.textContent = Math.floor((distance % (1000 * 60)) / 1000);
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // ===== Monthly Timeline (UPDATED SQUARES)
+    const timelineContainer = document.getElementById("monthlyTimeline");
+    const currentMonth = new Date().getMonth();
+
+    monthlyEvents.forEach((event, index) => {
+        const monthName = event.substring(0, 3);
+        const eventText = event.substring(event.indexOf(':') + 2);
+
+        const box = document.createElement('div');
+        box.classList.add('month-box');
+
+        box.innerHTML = `
+            ${monthName}<br>
+            <span style="font-size: 0.65rem; font-weight: normal;">'25</span>
+            <span class="tooltip">${eventText}</span>
+        `;
+
+        if (index === currentMonth) {
+            box.classList.add('active');
+        }
+
+        timelineContainer.appendChild(box);
+    });
+
+    // Snow
+    const snowflakesCount = 100;
+    for (let i = 0; i < snowflakesCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+        snowflake.style.width = (1 + Math.random() * 3) + 'px';
+        snowflake.style.height = snowflake.style.width;
+        snowflake.style.animationDuration = (5 + Math.random() * 10) + 's';
+        snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+        snowflake.style.animationDelay = Math.random() * 10 + 's';
+        document.body.appendChild(snowflake);
+    }
+</script>
+
+    <div class="mt-6 flex justify-center">
+    <a href="popularsongs.html" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow-lg transition duration-300">Go to Popular Songs</a>
+    </div>
+
+</body>
+</html>
